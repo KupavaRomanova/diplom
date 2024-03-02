@@ -1,0 +1,7 @@
+{
+  "name": "diplom",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue-vite"
+}
