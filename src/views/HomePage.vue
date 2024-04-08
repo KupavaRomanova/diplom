@@ -12,23 +12,60 @@
           <ion-title size="large">Blank</ion-title>
         </ion-toolbar>
       </ion-header>
-
-      <div id="container">
+      <ion-button router-link="/schedule">Default</ion-button>
+      <!-- <div id="container">
         <strong>Ready to create an app?</strong>
         <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-      </div>
+      </div> -->
     </ion-content>
   </ion-page>
 </template>
 
 <script setup lang="ts">
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
+import {
+  IonContent,
+  IonHeader,
+  IonPage,
+  IonTitle,
+  IonToolbar,
+  IonButton
+} from "@ionic/vue";
+
+import { useRouter } from 'vue-router';
+
+// Vue 3 Composition API
+function onClick() {
+  console.log('dsad')
+}
+
+
 </script>
+
+<!-- 
+<template>
+  <div>
+    <h2>Авторизация через Google</h2>
+    <button @click="loginWithGoogle">Войти через Google</button>
+  </div>
+</template> -->
+
+<!-- <script>
+export default {
+  methods: {
+    loginWithGoogle() {
+      // Здесь можно добавить код для авторизации через Google
+      // Например, использовать библиотеку Firebase для аутентификации
+      // или использовать API Google для OAuth авторизации
+      console.log('Авторизация через Google');
+    }
+  }
+}
+</script> -->
 
 <style scoped>
 #container {
   text-align: center;
-  
+
   position: absolute;
   left: 0;
   right: 0;
@@ -44,9 +81,9 @@ import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/vue
 #container p {
   font-size: 16px;
   line-height: 22px;
-  
+
   color: #8c8c8c;
-  
+
   margin: 0;
 }
 
