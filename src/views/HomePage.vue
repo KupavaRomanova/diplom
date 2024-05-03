@@ -1,26 +1,3 @@
-<template>
-  <ion-page>
-    <ion-header :translucent="true">
-      <ion-toolbar>
-        <ion-title>Blank</ion-title>
-      </ion-toolbar>
-    </ion-header>
-
-    <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">Blank</ion-title>
-        </ion-toolbar>
-      </ion-header>
-      <ion-button router-link="/schedule">Default</ion-button>
-      <!-- <div id="container">
-        <strong>Ready to create an app?</strong>
-        <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-      </div> -->
-    </ion-content>
-  </ion-page>
-</template>
-
 <script setup lang="ts">
 import {
   IonContent,
@@ -28,41 +5,48 @@ import {
   IonPage,
   IonTitle,
   IonToolbar,
-  IonButton
+  IonButton,
 } from "@ionic/vue";
 
-import { useRouter } from 'vue-router';
+import { IonInput } from "@ionic/vue";
+import { defineComponent } from "vue";
+
+import { useRouter } from "vue-router";
+
+import TheLogo from "@/component/TheLogo.vue";
 
 // Vue 3 Composition API
-function onClick() {
-  console.log('dsad')
-}
-
-
+// function onClick() {
+//   console.log("dsad");
+// }
 </script>
 
-<!-- 
 <template>
-  <div>
-    <h2>Авторизация через Google</h2>
-    <button @click="loginWithGoogle">Войти через Google</button>
-  </div>
-</template> -->
+  <ion-page>
+    <ion-content :fullscreen="true">
+      <div class="flex flex-col items-center gap-2 mx-10 my-3">
+        <TheLogo class="my-14" />
+        <ion-input
+        class="  min-w-80"
+          label="Электронная почта"
+          label-placement="floating"
+          fill="outline"
+          mode="md"
+          placeholder="Enter text"
+        ></ion-input>
 
-<!-- <script>
-export default {
-  methods: {
-    loginWithGoogle() {
-      // Здесь можно добавить код для авторизации через Google
-      // Например, использовать библиотеку Firebase для аутентификации
-      // или использовать API Google для OAuth авторизации
-      console.log('Авторизация через Google');
-    }
-  }
-}
-</script> -->
+        <ion-button
+          class="min-w-80 text-gray-950"
+          color="light"
+          router-link="/schedule"
+          >Войти</ion-button
+        >
+      </div>
+    </ion-content>
+  </ion-page>
+</template>
 
-<style scoped>
+<!-- <style scoped>
 #container {
   text-align: center;
 
@@ -90,4 +74,4 @@ export default {
 #container a {
   text-decoration: none;
 }
-</style>
+</style> -->
