@@ -21,12 +21,13 @@ const routes: Array<RouteRecordRaw> = [
     component: Schedule
   },
   {
-    path: '/camera',
+    path: '/camera/:lesson_id',
     name: 'Camera',
-    component: Camera
+    component: Camera,
+    props: true
   },
   {
-    path: '/result/:id&:title',
+    path: '/result/:id',
     name: 'Result',
     component: Result,
     props: true,
@@ -37,5 +38,14 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes
 })
+
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem('token');
+  if (to.matched.some(record => record.meta.requiresAuth) && !token) {
+    next('/login');
+  } else {
+    next();
+  }
+});
 
 export default router

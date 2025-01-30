@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { AuthResponse } from "../AuthResponse";
-import { useStore } from "../store/store";
+// import { useStore } from "@/store/sto";
+// import { ILog } from "@/service/ILogin";
 
-export const API_URL = `http://localhost:3000/api`;
+export const API_URL = 'http://192.168.0.143:8000';
 
 const $api = axios.create({
     withCredentials: true,
@@ -10,32 +10,29 @@ const $api = axios.create({
 });
 
 $api.interceptors.request.use((config) => {
-    const store = useStore();
-    if (store.isAuth) {
+    if (localStorage.getItem('token')) {
         config.headers.Authorization = `Bearer ${localStorage.getItem('token')}`;
     }
     return config;
 });
 
 $api.interceptors.response.use(
-    (config) => {
-        return config;
+    (response) => {
+        return response;
     },
     async (error) => {
         const originalRequest = error.config;
-        if (error.response.status == 401 && error.config && !error.config._isRetry) {
+        if (error.response && error.response.status === 401 && !originalRequest._isRetry) {
             originalRequest._isRetry = true;
             try {
-                const response = await axios.get<AuthResponse>(`${API_URL}/jwt/login`, {
+                const { data } = await axios.get(`${API_URL}/jwt/refresh`, {
                     withCredentials: true,
                 });
 
-                window.localStorage.setItem('sad', 'sadsa');
-
-                window.localStorage.setItem('token', );
+                localStorage.setItem('token', data.access_token);
                 return $api.request(originalRequest);
             } catch (e) {
-                console.log('НЕ АВТОРИЗОВАН');
+                console.log('Failed to refresh token:', e);
             }
         }
         throw error;

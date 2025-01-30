@@ -1,77 +1,87 @@
-<script setup lang="ts">
-import {
-  IonContent,
-  IonHeader,
-  IonPage,
-  IonTitle,
-  IonToolbar,
-  IonButton,
-} from "@ionic/vue";
-
-import { IonInput } from "@ionic/vue";
-import { defineComponent } from "vue";
-
-import { useRouter } from "vue-router";
-
-import TheLogo from "@/component/TheLogo.vue";
-
-// Vue 3 Composition API
-// function onClick() {
-//   console.log("dsad");
-// }
-</script>
-
 <template>
   <ion-page>
     <ion-content :fullscreen="true">
       <div class="flex flex-col items-center gap-2 mx-10 my-3">
         <TheLogo class="my-14" />
         <ion-input
-        class="  min-w-80"
-          label="Электронная почта"
-          label-placement="floating"
-          fill="outline"
-          mode="md"
-          placeholder="Enter text"
-        ></ion-input>
+            :value="email"
+            @ion-input="(x: any) => email = x.detail.value"
+            class="min-w-80"
+            label="Email"
+            label-placement="floating"
+            fill="outline"
+            mode="md"
+            placeholder="Введите email">
+        </ion-input>
+
+        <ion-input
+            :value="password"
+            @ion-input="(x: any) => password = x.detail.value"
+            class="min-w-80"
+            label="Пароль"
+            label-placement="floating"
+            fill="outline"
+            mode="md"
+            placeholder="Введите пароль"
+            type="password">
+        </ion-input>
 
         <ion-button
-          class="min-w-80 text-gray-950"
-          color="light"
-          router-link="/schedule"
-          >Войти</ion-button
-        >
+            @click="handleLogin"
+            color="light"
+            class="min-w-80 py-3 rounded-md flex items-center justify-center">
+          Войти
+        </ion-button>
+
+        <div v-if="err" class="w-64">
+          {{err}}
+        </div>
       </div>
     </ion-content>
   </ion-page>
 </template>
 
-<!-- <style scoped>
-#container {
-  text-align: center;
+<script setup lang="ts">
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import $api from "@/http";
+import TheLogo from "@/component/TheLogo.vue";
+import axios from "axios"; 
 
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-}
+const email = ref('');
+const password = ref('');
 
-#container strong {
-  font-size: 20px;
-  line-height: 26px;
-}
+const err = ref('');
 
-#container p {
-  font-size: 16px;
-  line-height: 22px;
+const router = useRouter();
 
-  color: #8c8c8c;
+const handleLogin = async () => {
+  try {
+    const data = new FormData();
+    data.append("username", email.value);
+    data.append("password", password.value);
 
-  margin: 0;
-}
+    console.log(data, email.value, password.value);
 
-#container a {
-  text-decoration: none;
-}
-</style> -->
+    const response = await $api.post('/jwt/login/', data);
+
+    localStorage.setItem('token', response.data.access_token);
+    $api.defaults.headers.common['Authorization'] = response.data.access_token;
+
+    await router.push('/schedule');
+  } catch (error: any) {
+    console.error('Login failed:', error);
+    err.value = 'Неверный логин или пароль';
+
+    // err.value = JSON.stringify({error}, ' ', 2);
+
+    if (error.response && error.response.status === 401) {
+      console.log('Unauthorized. Invalid credentials.');
+    } else if (error.response) {
+      console.log('Unexpected error during login:', error.response.data.message);
+    } else {
+      console.log('Unexpected error during login:', error.message);
+    }
+  }
+};
+</script>
